@@ -10,16 +10,17 @@ const App = () => {
 
    const [recipes, setRecipes] = useState([]);
    const [search, setSearch] = useState("");
+   const [query, setQuery] = useState('chicken'); // this state is changed when we finally click button after writing query
 
    //useEffect takes an arrow function
    useEffect(() => {
      getRecipes();
-   },[]); // the empty array as the second argument makes this function run only once when our page renders
+   },[query]); // the empty array as the second argument makes this function run only once when our page renders
           // if we supply value in the array, the useEffect will run when the value in the array changes.
 
 
   const getRecipes = async () => {
-      const response = await fetch(`https://api.edamam.com/search?q=chicken&app_id=${APP_ID}&app_key=${APP_KEY}`);
+      const response = await fetch(`https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}`);
        // whatever is after the q (that is query) is what we are searching for
       const data = await response.json(); // awaits does the work of promises
       setRecipes(data.hits);
@@ -28,12 +29,18 @@ const App = () => {
 
   const UpdateSearch = e => {
     setSearch(e.target.value);
-    console.log(search);
+  }
+
+  //get Search runs when the form submits
+  const getSearch = e => {
+     e.preventDefault(); // stopping the page refresh
+     setQuery(search);
+     setSearch('');
   }
 
   return (
     <div className="App">
-      <form className="search-form">
+      <form className="search-form" onSubmit={getSearch}>
         <input className="search-bar" type="text" value={search} onChange={UpdateSearch} />
         <button className="search-button" type="submit">
           Search
@@ -44,6 +51,7 @@ const App = () => {
                     title={recipe.recipe.label} 
                     calories={recipe.recipe.calories} 
                     image={recipe.recipe.image}
+                    ingredients={recipe.recipe.ingredients}
             />
         ))}
     </div>
