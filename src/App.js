@@ -22,6 +22,7 @@ const App = () => {
 
    //useEffect takes an arrow function
    useEffect(() => {
+     // eslint-disable-next-line
      getRecipes();
    },[query]); // the empty array as the second argument makes this function run only once when our page renders
           // if we supply value in the array, the useEffect will run when the value in the array changes.
