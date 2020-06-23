@@ -12,20 +12,19 @@ const App = () => {
    const [search, setSearch] = useState("");
    const [query, setQuery] = useState('chicken'); // this state is changed when we finally click button after writing query
 
+   const getRecipes = async () => {
+    const response = await fetch(`https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}`);
+     // whatever is after the q (that is query) is what we are searching for
+    const data = await response.json(); // awaits does the work of promises
+    setRecipes(data.hits);
+    console.log(data.hits);
+   }
+
    //useEffect takes an arrow function
    useEffect(() => {
      getRecipes();
    },[query]); // the empty array as the second argument makes this function run only once when our page renders
           // if we supply value in the array, the useEffect will run when the value in the array changes.
-
-
-  const getRecipes = async () => {
-      const response = await fetch(`https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}`);
-       // whatever is after the q (that is query) is what we are searching for
-      const data = await response.json(); // awaits does the work of promises
-      setRecipes(data.hits);
-      console.log(data.hits);
-  }
 
   const UpdateSearch = e => {
     setSearch(e.target.value);
